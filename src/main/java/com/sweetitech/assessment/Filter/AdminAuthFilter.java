@@ -29,7 +29,7 @@ public class AdminAuthFilter implements Filter {
 
         log.info("IP: " + request.getRemoteAddr() + " Servlet Path: " + request.getServletPath());
 
-        if (isLoginURL(request) || isLoggedIn(request) || request.getServletPath().equalsIgnoreCase("/about")) {
+        if (isLoginURL(request) || isLoggedIn(request) || request.getServletPath().equals("/about")) {
             chain.doFilter(req, res);
         } else {
             response.sendRedirect("/login");

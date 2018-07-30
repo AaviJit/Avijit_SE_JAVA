@@ -16,23 +16,28 @@ public class Product {
     @NotNull
     @Size(min = 3)
     private String name;
-    private float price;
-    private float profitPercentage;
+    @NotNull
+    private Float price;
+    @NotNull
+    private Float profitPercentage;
+    @NotNull
     private String productType;
-    private int soldCount;
+    @NotNull
+    private Integer soldCount;
 
     @Transient
     private float totalProfit;
 
-    public Product(String name, float price, float profitPercentage, String productType, int soldCount) {
+
+    public Product() {
+    }
+
+    public Product(@NotNull @Size(min = 3) String name, Float price, Float profitPercentage, String productType, Integer soldCount) {
         this.name = name;
         this.price = price;
         this.profitPercentage = profitPercentage;
         this.productType = productType;
         this.soldCount = soldCount;
-    }
-
-    public Product() {
     }
 
     public Integer getId() {
@@ -51,24 +56,36 @@ public class Product {
         this.name = name;
     }
 
-    public float getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 
-    public float getProfitPercentage() {
+    public Float getProfitPercentage() {
         return profitPercentage;
     }
 
-    public void setProfitPercentage(float profitPercentage) {
+    public void setProfitPercentage(Float profitPercentage) {
         this.profitPercentage = profitPercentage;
     }
 
     public String getProductType() {
         return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    public Integer getSoldCount() {
+        return soldCount;
+    }
+
+    public void setSoldCount(Integer soldCount) {
+        this.soldCount = soldCount;
     }
 
     public float getTotalProfit() {
@@ -79,28 +96,16 @@ public class Product {
         this.totalProfit = totalProfit;
     }
 
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
-
-    public int getSoldCount() {
-        return soldCount;
-    }
-
-    public void setSoldCount(int soldCount) {
-        this.soldCount = soldCount;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return Float.compare(product.price, price) == 0 &&
-                Float.compare(product.profitPercentage, profitPercentage) == 0 &&
-                soldCount == product.soldCount &&
-                Objects.equals(name, product.name) &&
-                productType == product.productType;
+        return Objects.equals(name, product.name) &&
+                Objects.equals(price, product.price) &&
+                Objects.equals(profitPercentage, product.profitPercentage) &&
+                Objects.equals(productType, product.productType) &&
+                Objects.equals(soldCount, product.soldCount);
     }
 
     @Override

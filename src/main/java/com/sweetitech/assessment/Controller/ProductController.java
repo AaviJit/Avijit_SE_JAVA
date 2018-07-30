@@ -35,69 +35,32 @@ public class ProductController {
     @GetMapping("/addproduct")
     public String addProduct(Model model)
     {
-
         model.addAttribute("product" ,new Product());
-
         return "addProduct";
     }
 
-    @PostMapping("/addproduct")
-    public String doAdd(@Valid @ModelAttribute("product") Product product, BindingResult result, Model model)
+    @RequestMapping(method = RequestMethod.POST, value = "/addproduct", params = "create")
+    public String createProduct(@Valid @ModelAttribute("product") Product product, BindingResult result)
     {
-
-        //Validation Code
-        if(product.getId() != null)
-        {
-            ProductValidator.setEditName(productRepository.getOne(product.getId()).getName());
-        }
-
-        productValidator.validate(product,result);
-
         if(result.hasErrors())
         {
-            if(product.getId() == null)
-            {
-
-                final List<ObjectError> errors = result.getAllErrors().stream()
-                        .filter(e -> e.getCode().equals("Size"))
-                        .collect(Collectors.toList());
-                if(errors.size() ==0)
-                {
-                    model.addAttribute("exit", true);
-                }
-                return "addProduct";
-            }
-            else
-            {
-                Product product2 = productRepository.getOne(product.getId());
-                ProductValidator.setEditName(product2.getName());
-                model.addAttribute("product2",product2);
-                model.addAttribute("exit","exit");
-                return "addProduct";
-            }
+            return "addProduct";
         }
-
-
-        //for save and edit
-
-       if(product.getId() == null)
-       {
-           productRepository.save(product);
-       }
-        else
-        {
-            Product product1 = productRepository.getOne(product.getId());
-            product1.setName(product.getName());
-            product1.setPrice(product.getPrice());
-            product1.setProductType(product.getProductType());
-            product1.setProfitPercentage(product.getProfitPercentage());
-            product1.setSoldCount(product.getSoldCount());
-            productRepository.save(product1);
-
-        }
-        return "redirect:/productList";
+            productRepository.save(product);
+            return "redirect:/productList";
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/addproduct", params = "update")
+    public String updateProduct(@Valid @ModelAttribute("product") Product product, BindingResult result)
+    {
+        if(result.hasErrors())
+        {
+            return "addProduct";
+        }
+        productRepository.save(product);
+
+        return "redirect:/productList";
+    }
 
     @GetMapping("/productList")
     public String getAllProduct(Model model)
@@ -121,6 +84,7 @@ public class ProductController {
     {
         Product product = productRepository.getOne(id);
         model.addAttribute("product",product);
+        model.addAttribute("path","update");
         return "addProduct";
     }
 

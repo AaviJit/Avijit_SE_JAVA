@@ -1,17 +1,17 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
 <html>
 <head>
     <title>Save Product</title>
-    <%@ include file="shared/staticDesign.jsp"%>
+    <%@ include file="shared/staticDesign.jsp" %>
 </head>
 <body>
 
 <div class="container">
-    <%@ include file="shared/nabvar.jsp"%>
+    <%@ include file="shared/nabvar.jsp" %>
     <br/><br/><br/><br/>
 
     <sf:form class="form-horizontal"
@@ -47,16 +47,6 @@
                 </div>
             </div>
 
-
-            <c:if test="${exit != null}">
-                <div class="form-group">
-                    <div class="col-md-8 alert alert-danger">
-                        <spring:message code="error.duplicate.product"/>
-                    </div>
-                </div>
-            </c:if>
-
-
             <!-- Text input-->
             <div class="form-group">
                 <label class="col-md-4 control-label" for="price">Price</label>
@@ -66,7 +56,6 @@
                     <sf:errors path="price" cssClass="alert-danger"></sf:errors>
                 </div>
             </div>
-
 
 
             <!-- Text input-->
@@ -95,7 +84,7 @@
             <!-- Text input-->
             <div class="form-group">
                 <label class="col-md-4 control-label" for="soldCount">Sold Count
-                    </label>
+                </label>
                 <div class="col-md-4">
                     <sf:input id="soldCount" path="soldCount" name="soldCount" type="text"
                               placeholder="soldCount" class="form-control input-md"></sf:input>
@@ -104,16 +93,23 @@
             </div>
 
 
-
             <!-- Button -->
             <div class="form-group">
                 <label class="col-md-4 control-label" for="save"></label>
                 <div class="col-md-4">
-                    <button id="save" name="save" class="btn btn-primary">Save</button>
+
+
+                    <c:choose>
+                        <c:when test="${product.id gt 0}">
+                            <button id="update" name="update" class="btn btn-primary">Update</button>
+                        </c:when>
+
+                        <c:otherwise>
+                            <button id="save" name="create" class="btn btn-primary">Save</button>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
-
-
         </fieldset>
     </sf:form>
 </div>

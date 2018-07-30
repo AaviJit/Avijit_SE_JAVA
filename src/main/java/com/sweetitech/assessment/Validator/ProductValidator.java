@@ -1,4 +1,5 @@
 package com.sweetitech.assessment.Validator;
+
 import com.sweetitech.assessment.Domain.Product;
 import com.sweetitech.assessment.Repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,14 +9,6 @@ import org.springframework.validation.Validator;
 
 @Component
 public class ProductValidator implements Validator {
-
-
-
-    private static String editName = "";
-
-    public static void setEditName(String editName) {
-        ProductValidator.editName = editName;
-    }
 
     @Autowired
     ProductRepository productRepository;
@@ -27,11 +20,22 @@ public class ProductValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        Product product =(Product) o;
+        Product product = (Product) o;
 
-        if (productRepository.existsByName(product.getName()) && !editName.equals(product.getName()))
+
+        if(product.getId() == null)
         {
-            errors.reject("error.duplicate.product");
+            if(productRepository.existsByName(product.getName()))
+            {
+                errors.rejectValue("name", "error.duplicate.product");
+            }
+        }
+
+        else {
+            Product product1 = productRepository.getOne(product.getId());
+            if (!product.getName().equals(product1.getName()) && productRepository.existsByName(product.getName())) {
+                errors.rejectValue("name", "error.duplicate.product");
+            }
         }
     }
 }
